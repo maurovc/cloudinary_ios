@@ -24,6 +24,12 @@
 
 import Foundation
 
+#if swift(>=4.2)
+public typealias CLDControlState = UIControl.State
+#else
+public typealias CLDControlState = UIControlState
+#endif
+
 public extension UIButton {
     
     /**
@@ -37,7 +43,7 @@ public extension UIButton {
      CLDNetworkDelegate() by default.
      
      */
-    @objc public func cldSetImage(_ url: String, forState state: UIControlState, cloudinary: CLDCloudinary, placeholder: UIImage? = nil) {
+    @objc public func cldSetImage(_ url: String, forState state: CLDControlState, cloudinary: CLDCloudinary, placeholder: UIImage? = nil) {
         fetchImageForUIElement(url, placeholder: placeholder, cloudinary: cloudinary) { [weak self] (image: UIImage) in
             self?.setImage(image, for: state)
         }
@@ -55,7 +61,7 @@ public extension UIButton {
      - parameter placeholder:       A placeholder image to be set as the background image untill the asynchronus download request finishes.
      
      */
-    @objc public func cldSetImage(publicId: String, cloudinary: CLDCloudinary, forState state: UIControlState, signUrl: Bool = false, transformation: CLDTransformation? = nil, placeholder: UIImage? = nil) {
+    @objc public func cldSetImage(publicId: String, cloudinary: CLDCloudinary, forState state: CLDControlState, signUrl: Bool = false, transformation: CLDTransformation? = nil, placeholder: UIImage? = nil) {
         
         let urlGen = cloudinary.createUrl()
         
@@ -89,7 +95,7 @@ public extension UIButton {
                                     CLDNetworkDelegate() by default.
      
     */
-    @objc public func cld_setBackgroundImage(_ url: String, forState state: UIControlState, cloudinary: CLDCloudinary, placeholder: UIImage? = nil) {
+    @objc public func cld_setBackgroundImage(_ url: String, forState state: CLDControlState, cloudinary: CLDCloudinary, placeholder: UIImage? = nil) {
         
         let setImageOnMainQueue = { [weak self] (image: UIImage) in
             DispatchQueue.main.async {
@@ -112,7 +118,7 @@ public extension UIButton {
      - parameter placeholder:       A placeholder image to be set as the background image untill the asynchronus download request finishes.
      
      */
-    @objc public func cld_setBackgroundImage(publicId: String, cloudinary: CLDCloudinary, forState state: UIControlState, signUrl: Bool = false, transformation: CLDTransformation? = nil, placeholder: UIImage? = nil) {
+    @objc public func cld_setBackgroundImage(publicId: String, cloudinary: CLDCloudinary, forState state: CLDControlState, signUrl: Bool = false, transformation: CLDTransformation? = nil, placeholder: UIImage? = nil) {
         
         let urlGen = cloudinary.createUrl()
         

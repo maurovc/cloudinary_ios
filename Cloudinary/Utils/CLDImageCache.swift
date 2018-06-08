@@ -81,8 +81,13 @@ internal class CLDImageCache {
         
         calculateCurrentDiskCacheSize()
         clearDiskToMatchCapacityIfNeeded()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(CLDImageCache.clearMemoryCache), name: NSNotification.Name.UIApplicationDidReceiveMemoryWarning, object: nil)
+      
+      #if swift(>=4.2)
+      let notificationName = UIApplication.didReceiveMemoryWarningNotification
+      #else
+      let notificationName = NSNotification.Name.UIApplicationDidReceiveMemoryWarning
+      #endif
+        NotificationCenter.default.addObserver(self, selector: #selector(CLDImageCache.clearMemoryCache), name: notificationName, object: nil)
     }
     
     deinit {
@@ -145,7 +150,14 @@ internal class CLDImageCache {
             let path = getFilePathFromKey(key)
             readWriteQueue.async {
                 // If the original data was passed, save the data to the disk, otherwise default to UIImagePNGRepresentation to create the data from the image
-                if let data = data ?? UIImagePNGRepresentation(image) {
+              
+              #if swift(>=4.2)
+              let fallbackData = image.pngData()
+              #else
+              let fallbackData = UIImagePNGRepresentation(image)
+              #endif
+              
+                if let data = data ?? fallbackData {
                     // create the cach directory if it doesn't exist
                     if !FileManager.default.fileExists(atPath: self.diskCacheDir) {
                         do {

@@ -101,12 +101,21 @@ public class CLDPreprocessHelpers {
 
     internal static func encodeAs(image: UIImage, format: EncodingFormat, quality: CGFloat) -> Data? {
 
+      #if swift(>=4.2)
+        switch format {
+        case EncodingFormat.JPEG:
+            return image.jpegData(compressionQuality: quality)
+        case EncodingFormat.PNG:
+            return image.pngData()
+        }
+      #else
         switch format {
         case EncodingFormat.JPEG:
             return UIImageJPEGRepresentation(image, quality)
         case EncodingFormat.PNG:
             return UIImagePNGRepresentation(image)
         }
+      #endif
     }
 
     internal static func resizeImage(image: UIImage, requiredSize: CGSize) -> UIImage {
